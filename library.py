@@ -391,10 +391,6 @@ titanic_transformer = Pipeline(steps=[
     ('joined_ohe', CustomOHETransformer(target_column='Joined'))
     ], verbose=True)
 
-#now invoke it
-transformed_df = titanic_transformer.fit_transform(titanic_features)
-
-
 
 #Once you finish challenge 3 you will have first step - figure out others - I ended up with 5 total steps
 customer_transformer = Pipeline(steps=[
