@@ -347,14 +347,14 @@ def transform(self, X: pd.DataFrame) -> pd.DataFrame:
 
     missing_cols = set(self.column_list) - set(X.columns)
     if self.action == 'keep':
-    assert not missing_cols, f'{self.__class__.__name__}.transform unknown columns to keep: {list(missing_cols)}'
-    X_ = X[self.column_list]
+        assert not missing_cols, f'{self.__class__.__name__}.transform unknown columns to keep: {list(missing_cols)}'
+        X_ = X[self.column_list]
 
     elif self.action == 'drop':
-    if missing_cols:
-        print(f"\nWarning: {self.__class__.__name__} does not contain these columns to drop: {list(missing_cols)}\n") # Warning for missing columns in 'drop'.
-    # assert not missing_cols, f'{self.__class__.__name__}.transform unknown columns to drop: {list(missing_cols)}'
-    X_ = X.drop(columns=self.column_list, errors='ignore') # Ignore errors for missing columns.
+        if missing_cols:
+            print(f"\nWarning: {self.__class__.__name__} does not contain these columns to drop: {list(missing_cols)}\n") # Warning for missing columns in 'drop'.
+        # assert not missing_cols, f'{self.__class__.__name__}.transform unknown columns to drop: {list(missing_cols)}'
+        X_ = X.drop(columns=self.column_list, errors='ignore') # Ignore errors for missing columns.
 
     return X_
 
