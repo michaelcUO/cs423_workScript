@@ -230,153 +230,153 @@ class CustomOHETransformer(BaseEstimator, TransformerMixin):
     
     
     
-    class CustomDropColumnsTransformer(BaseEstimator, TransformerMixin):
-        """
-        A transformer that either drops or keeps specified columns in a DataFrame.
+class CustomDropColumnsTransformer(BaseEstimator, TransformerMixin):
+    """
+    A transformer that either drops or keeps specified columns in a DataFrame.
 
-        This transformer follows the scikit-learn transformer interface and can be used in
-        a scikit-learn pipeline. It allows for selectively keeping or dropping columns
-        from a DataFrame based on a provided list.
+    This transformer follows the scikit-learn transformer interface and can be used in
+    a scikit-learn pipeline. It allows for selectively keeping or dropping columns
+    from a DataFrame based on a provided list.
 
-        Parameters
-        ----------
-        column_list : List[str]
-            List of column names to either drop or keep, depending on the action parameter.
-        action : str, default='drop'
-            The action to perform on the specified columns. Must be one of:
-            - 'drop': Remove the specified columns from the DataFrame
-            - 'keep': Keep only the specified columns in the DataFrame
+    Parameters
+    ----------
+    column_list : List[str]
+        List of column names to either drop or keep, depending on the action parameter.
+    action : str, default='drop'
+        The action to perform on the specified columns. Must be one of:
+        - 'drop': Remove the specified columns from the DataFrame
+        - 'keep': Keep only the specified columns in the DataFrame
 
-        Attributes
-        ----------
-        column_list : List[str]
-            The list of column names to operate on.
-        action : str
-            The action to perform ('drop' or 'keep').
+    Attributes
+    ----------
+    column_list : List[str]
+        The list of column names to operate on.
+    action : str
+        The action to perform ('drop' or 'keep').
 
-        Examples
-        --------
-        >>> import pandas as pd
-        >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
-        >>>
-        >>> # Drop columns example
-        >>> dropper = CustomDropColumnsTransformer(column_list=['A', 'B'], action='drop')
-        >>> dropped_df = dropper.fit_transform(df)
-        >>> dropped_df.columns.tolist()
-        ['C']
-        >>>
-        >>> # Keep columns example
-        >>> keeper = CustomDropColumnsTransformer(column_list=['A', 'C'], action='keep')
-        >>> kept_df = keeper.fit_transform(df)
-        >>> kept_df.columns.tolist()
-        ['A', 'C']
-        """
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
+    >>>
+    >>> # Drop columns example
+    >>> dropper = CustomDropColumnsTransformer(column_list=['A', 'B'], action='drop')
+    >>> dropped_df = dropper.fit_transform(df)
+    >>> dropped_df.columns.tolist()
+    ['C']
+    >>>
+    >>> # Keep columns example
+    >>> keeper = CustomDropColumnsTransformer(column_list=['A', 'C'], action='keep')
+    >>> kept_df = keeper.fit_transform(df)
+    >>> kept_df.columns.tolist()
+    ['A', 'C']
+    """
 
-    def __init__(self, column_list: List[str], action: Literal['drop', 'keep'] = 'drop') -> None:
-        """
-        Initialize the CustomDropColumnsTransformer.
+def __init__(self, column_list: List[str], action: Literal['drop', 'keep'] = 'drop') -> None:
+    """
+    Initialize the CustomDropColumnsTransformer.
 
-        Parameters
-        ----------
-        column_list : List[str]
-            List of column names to either drop or keep.
-        action : str, default='drop'
-            The action to perform on the specified columns.
-            Must be either 'drop' or 'keep'.
+    Parameters
+    ----------
+    column_list : List[str]
+        List of column names to either drop or keep.
+    action : str, default='drop'
+        The action to perform on the specified columns.
+        Must be either 'drop' or 'keep'.
 
-        Raises
-        ------
-        AssertionError
-            If action is not 'drop' or 'keep', or if column_list is not a list.
-        """
-        assert action in ['keep', 'drop'], f'DropColumnsTransformer action {action} not in ["keep", "drop"]'
-        assert isinstance(column_list, list), f'DropColumnsTransformer expected list but saw {type(column_list)}'
-        self.column_list: List[str] = column_list
-        self.action: Literal['drop', 'keep'] = action
+    Raises
+    ------
+    AssertionError
+        If action is not 'drop' or 'keep', or if column_list is not a list.
+    """
+    assert action in ['keep', 'drop'], f'DropColumnsTransformer action {action} not in ["keep", "drop"]'
+    assert isinstance(column_list, list), f'DropColumnsTransformer expected list but saw {type(column_list)}'
+    self.column_list: List[str] = column_list
+    self.action: Literal['drop', 'keep'] = action
 
-    #your code below
+#your code below
 
-    def fit(self, X: pd.DataFrame, y: Optional[Iterable] = None) -> Self:
-      """
-        Fit method - does nothing for this transformer.
+def fit(self, X: pd.DataFrame, y: Optional[Iterable] = None) -> Self:
+    """
+    Fit method - does nothing for this transformer.
 
-        This method is required by the scikit-learn transformer interface but doesn't
-        perform any actual fitting operation for this specific transformer.
-        It simply prints a warning message and returns itself.
+    This method is required by the scikit-learn transformer interface but doesn't
+    perform any actual fitting operation for this specific transformer.
+    It simply prints a warning message and returns itself.
 
-        Parameters
-        ----------
-        X : pandas.DataFrame
-            The input data to fit.
-        y : array-like, default=None
-            Ignored. Present for compatibility with scikit-learn interface.
+    Parameters
+    ----------
+    X : pandas.DataFrame
+        The input data to fit.
+    y : array-like, default=None
+        Ignored. Present for compatibility with scikit-learn interface.
 
-        Returns
-        -------
-        self : instance of CustomDropColumnsTransformer
-            Returns self to allow method chaining.
-        """
-      print(f"\nWarning: {self.__class__.__name__}.fit does nothing.\n")
-      return self
+    Returns
+    -------
+    self : instance of CustomDropColumnsTransformer
+        Returns self to allow method chaining.
+    """
+    print(f"\nWarning: {self.__class__.__name__}.fit does nothing.\n")
+    return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
-      """
-        Apply the column dropping or keeping operation to the input DataFrame.
+def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+    """
+    Apply the column dropping or keeping operation to the input DataFrame.
 
-        This method performs the core functionality of the transformer by either
-        dropping or keeping specified columns based on the 'action' parameter
-        set during initialization.
+    This method performs the core functionality of the transformer by either
+    dropping or keeping specified columns based on the 'action' parameter
+    set during initialization.
 
-        Parameters
-        ----------
-        X : pandas.DataFrame
-            The DataFrame containing the columns to operate on.
+    Parameters
+    ----------
+    X : pandas.DataFrame
+        The DataFrame containing the columns to operate on.
 
-        Returns
-        -------
-        pandas.DataFrame
-            A copy of the input DataFrame with the specified columns either dropped or kept.
+    Returns
+    -------
+    pandas.DataFrame
+        A copy of the input DataFrame with the specified columns either dropped or kept.
 
-        Raises
-        ------
-        AssertionError
-            - If X is not a pandas DataFrame.
-            - If action is 'keep' and any columns in column_list are not found in X.
-        """
-      assert isinstance(X, pd.DataFrame), f'{self.__class__.__name__}.transform expected Dataframe but got {type(X)} instead.'
+    Raises
+    ------
+    AssertionError
+        - If X is not a pandas DataFrame.
+        - If action is 'keep' and any columns in column_list are not found in X.
+    """
+    assert isinstance(X, pd.DataFrame), f'{self.__class__.__name__}.transform expected Dataframe but got {type(X)} instead.'
 
-      missing_cols = set(self.column_list) - set(X.columns)
-      if self.action == 'keep':
-        assert not missing_cols, f'{self.__class__.__name__}.transform unknown columns to keep: {list(missing_cols)}'
-        X_ = X[self.column_list]
+    missing_cols = set(self.column_list) - set(X.columns)
+    if self.action == 'keep':
+    assert not missing_cols, f'{self.__class__.__name__}.transform unknown columns to keep: {list(missing_cols)}'
+    X_ = X[self.column_list]
 
-      elif self.action == 'drop':
-        if missing_cols:
-          print(f"\nWarning: {self.__class__.__name__} does not contain these columns to drop: {list(missing_cols)}\n") # Warning for missing columns in 'drop'.
-        # assert not missing_cols, f'{self.__class__.__name__}.transform unknown columns to drop: {list(missing_cols)}'
-        X_ = X.drop(columns=self.column_list, errors='ignore') # Ignore errors for missing columns.
+    elif self.action == 'drop':
+    if missing_cols:
+        print(f"\nWarning: {self.__class__.__name__} does not contain these columns to drop: {list(missing_cols)}\n") # Warning for missing columns in 'drop'.
+    # assert not missing_cols, f'{self.__class__.__name__}.transform unknown columns to drop: {list(missing_cols)}'
+    X_ = X.drop(columns=self.column_list, errors='ignore') # Ignore errors for missing columns.
 
-      return X_
+    return X_
 
-    def fit_transform(self, X: pd.DataFrame, y: Optional[Iterable] = None) -> pd.DataFrame:
-      """
-        Fit to data, then transform it.
+def fit_transform(self, X: pd.DataFrame, y: Optional[Iterable] = None) -> pd.DataFrame:
+    """
+    Fit to data, then transform it.
 
-        Combines fit() and transform() methods for convenience.
+    Combines fit() and transform() methods for convenience.
 
-        Parameters
-        ----------
-        X : pandas.DataFrame
-            The DataFrame containing the column to transform.
-        y : array-like, default=None
-            Ignored. Present for compatibility with scikit-learn interface.
+    Parameters
+    ----------
+    X : pandas.DataFrame
+        The DataFrame containing the column to transform.
+    y : array-like, default=None
+        Ignored. Present for compatibility with scikit-learn interface.
 
-        Returns
-        -------
-        pd.DataFrame
-            A copy of the input DataFrame with mapping applied to the specified column.
-        """
-      return self.transform(X)
+    Returns
+    -------
+    pd.DataFrame
+        A copy of the input DataFrame with mapping applied to the specified column.
+    """
+    return self.transform(X)
 
 
 
