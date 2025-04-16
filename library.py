@@ -384,8 +384,8 @@ def fit_transform(self, X: pd.DataFrame, y: Optional[Iterable] = None) -> pd.Dat
 
 #first define the pipeline (but do not invoke it)
 titanic_transformer = Pipeline(steps=[
-    ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-    ('class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
+    ('map_gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
+    ('map_class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
     #add your new ohe step below
     ('joined_ohe', CustomOHETransformer(target_column='Joined'))
     ], verbose=True)
