@@ -9,6 +9,29 @@ import sklearn
 sklearn.set_config(transform_output="pandas")  #says pass pandas tables through pipeline instead of numpy matrices
 
 
+#first define the pipeline (but do not invoke it)
+titanic_transformer = Pipeline(steps=[
+    ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
+    ('class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
+    #add your new ohe step below
+    ('joined_ohe', CustomOHETransformer(target_column='Joined'))
+    ], verbose=True)
+
+#now invoke it
+transformed_df = titanic_transformer.fit_transform(titanic_features)
+
+
+
+#Once you finish challenge 3 you will have first step - figure out others - I ended up with 5 total steps
+customer_transformer = Pipeline(steps=[
+    #fill in the steps on your own
+    ('drop_columns', CustomDropColumnsTransformer(['ID'], 'drop')),
+    ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
+    ('experience_level', CustomMappingTransformer('Experience Level', {'low': 0, 'medium': 1, 'high': 2})),
+    ('os', CustomOHETransformer(target_column='OS')),
+    ('isp', CustomOHETransformer(target_column='ISP'))
+
+    ], verbose=True)
 
 class CustomMappingTransformer(BaseEstimator, TransformerMixin):
     """
@@ -382,29 +405,7 @@ def fit_transform(self, X: pd.DataFrame, y: Optional[Iterable] = None) -> pd.Dat
 
 
 
-#first define the pipeline (but do not invoke it)
-titanic_transformer = Pipeline(steps=[
-    ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-    ('class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
-    #add your new ohe step below
-    ('joined_ohe', CustomOHETransformer(target_column='Joined'))
-    ], verbose=True)
 
-#now invoke it
-transformed_df = titanic_transformer.fit_transform(titanic_features)
-
-
-
-#Once you finish challenge 3 you will have first step - figure out others - I ended up with 5 total steps
-customer_transformer = Pipeline(steps=[
-    #fill in the steps on your own
-    ('drop_columns', CustomDropColumnsTransformer(['ID'], 'drop')),
-    ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-    ('experience_level', CustomMappingTransformer('Experience Level', {'low': 0, 'medium': 1, 'high': 2})),
-    ('os', CustomOHETransformer(target_column='OS')),
-    ('isp', CustomOHETransformer(target_column='ISP'))
-
-    ], verbose=True)
 
 
 
