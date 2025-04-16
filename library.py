@@ -406,12 +406,14 @@ customer_transformer = Pipeline(steps=[
 
     ], verbose=True)
 
-
-
-customer_transformer = Pipeline(steps=[
-    #add drop step below
-    ('drop_columns', CustomDropColumnsTransformer(['ID'], 'drop'))
-    ], verbose=True)
-
-#now invoke it
 transformed_df = customer_transformer.fit_transform(customer_features)
+
+
+
+# customer_transformer = Pipeline(steps=[
+#     #add drop step below
+#     ('drop_columns', CustomDropColumnsTransformer(['ID'], 'drop'))
+#     ], verbose=True)
+
+# #now invoke it
+# transformed_df = customer_transformer.fit_transform(customer_features)
