@@ -169,13 +169,14 @@ class CustomOHETransformer(BaseEstimator, TransformerMixin):
     Encodes specified column(s) using one-hot encoding.
     """
 
-    def __init__(self, target_column: str) -> None:
+    def __init__(self, target_column: str, **kwargs: Any) -> None: # NEW: '**kwargs: Any'.
         """
         Parameters
         ----------
         target_column : str
             The column to one-hot encode.
         """
+        super().__init__(**kwargs)  # NEW.
         assert isinstance(target_column, str), f'{self.__class__.__name__} expected str but got {type(target_column)} instead.'
         self.target_column = target_column
 
