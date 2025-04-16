@@ -1,4 +1,5 @@
 from __future__ import annotations  #must be first line in your library!
+import warnings
 import pandas as pd
 import numpy as np
 import types
