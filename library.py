@@ -1,5 +1,5 @@
 from __future__ import annotations  #must be first line in your library!
-import warnings
+# import warnings
 import pandas as pd
 import numpy as np
 import types
@@ -380,16 +380,13 @@ class CustomDropColumnsTransformer(BaseEstimator, TransformerMixin):
         return self.transform(X)
 
 
-
-
-
 #first define the pipeline (but do not invoke it)
 titanic_transformer = Pipeline(steps=[
     ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
     ('class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
     #add your new ohe step below
     ('joined_ohe', CustomOHETransformer(target_column='Joined'))
-    ], verbose=True)
+], verbose=True)
 
 
 #Once you finish challenge 3 you will have first step - figure out others - I ended up with 5 total steps
@@ -401,4 +398,4 @@ customer_transformer = Pipeline(steps=[
     ('os', CustomOHETransformer(target_column='OS')),
     ('isp', CustomOHETransformer(target_column='ISP'))
 
-    ], verbose=True)
+], verbose=True)
