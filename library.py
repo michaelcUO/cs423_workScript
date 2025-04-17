@@ -380,6 +380,72 @@ class CustomDropColumnsTransformer(BaseEstimator, TransformerMixin):
         return self.transform(X)
 
 
+class CustomSigma3Transformer(BaseEstimator, TransformerMixin):
+    """
+    A transformer that applies 3-sigma clipping to a specified column in a pandas DataFrame.
+
+    This transformer follows the scikit-learn transformer interface and can be used in
+    a scikit-learn pipeline. It clips values in the target column to be within three standard
+    deviations from the mean.
+
+    Parameters
+    ----------
+    target_column : Hashable
+        The name of the column to apply 3-sigma clipping on.
+
+    Attributes
+    ----------
+    high_wall : Optional[float]
+        The upper bound for clipping, computed as mean + 3 * standard deviation.
+    low_wall : Optional[float]
+        The lower bound for clipping, computed as mean - 3 * standard deviation.
+    """
+    def __init__(self, target_column):
+        self.target_column = target_column
+        self.low_wall = None
+        self.high_wall = None
+
+    def fit(self, X: pd.DataFrame, y=None):
+      assert isinstance(X, pd.DataFrame), (
+          f"{self.__class__.name__}fit expected a DataFrame, got {type(X)}"
+      )
+
+      assert self.target_column in X.columns, (
+          f"{self.__class__.__name__}.fit unknown column '{self.target_column}'"
+      )
+
+      assert pd.api.types.is_numeric_dtype(X[self.target_column]), (
+          f"{self.__class__.__name__}.fit expected numeric dtype in '{self.target_column}'"
+      )
+
+      # Computer mean and std.
+      m = X[self.target_column].mean()
+      sigma = X[self.target_column].std()
+
+      # Compute the low and high walls.
+      self.low_wall = m - 3 * sigma
+      self.high_wall = m + 3 * sigma
+
+      return self
+
+    def transform(self, X: pd.DataFrame):
+        assert self.low_wall is not None and self.high_wall is not None, (
+            f"{self.__class__.__name__}.transform called before fit. "
+        )
+        
+        assert isinstance(X, pd.DataFrame), (
+            f"{self.__class__.name__}transform expected a DataFrame, got {type(X)}"
+        )
+
+        # Clip and reset index.
+
+        X_ = X.copy()
+        X_[self.target_column] = X_[self.target_column].clip(lower=self.low_wall, upper=self.high_wall)
+        return X_.reset_index(drop=True)
+
+
+
+
 #first define the pipeline (but do not invoke it)
 titanic_transformer = Pipeline(steps=[
     ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
