@@ -10,6 +10,7 @@ from sklearn.impute import KNNImputer
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.neighbors import KNeighborsClassifier # From midterm.
 from sklearn.model_selection import train_test_split # From midterm.
+from sklearn.metrics import f1_score # From midterm.
 import sklearn
 sklearn.set_config(transform_output="pandas")  #says pass pandas tables through pipeline instead of numpy matrices
 
