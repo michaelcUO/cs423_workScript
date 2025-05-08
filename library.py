@@ -811,7 +811,7 @@ class CustomKNNTransformer(BaseEstimator, TransformerMixin):
         return pd.DataFrame(self.knn_imputer.transform(X), columns=X.columns, index=X.index)
 
 
-
+############## UPDATED FOR CHAPTER 8. ################
 class CustomTargetTransformer(BaseEstimator, TransformerMixin):
     """
     A target encoder that applies smoothing and returns np.nan for unseen categories.
@@ -829,7 +829,8 @@ class CustomTargetTransformer(BaseEstimator, TransformerMixin):
         self.global_mean_ = None
         self.encoding_dict_ = None
 
-    def fit(self, X, y):
+    # def fit(self, X, y): # BEFORE CHAP8.
+    def fit(self, X, y=None):
         """
         Fit the target encoder using training data.
 
@@ -840,6 +841,10 @@ class CustomTargetTransformer(BaseEstimator, TransformerMixin):
         y : array-like of shape (n_samples,)
             Target values.
         """
+        if y is None:
+            raise ValueError(f"{self.__class__.__name__}.fit requires a target (y), but got None. "
+                f"This transformer must be used with fit(X, y), not fit(X) alone.") # NEW: FOR CHAPT8.
+
         assert isinstance(X, pd.core.frame.DataFrame), f'{self.__class__.__name__}.fit expected Dataframe but got {type(X)} instead.'
         assert self.col in X, f'{self.__class__.__name__}.fit column not in X: {self.col}. Actual columns: {X.columns}'
         assert isinstance(y, Iterable), f'{self.__class__.__name__}.fit expected Iterable but got {type(y)} instead.'
