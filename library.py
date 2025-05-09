@@ -1004,9 +1004,9 @@ customer_transformer = Pipeline(steps=[
     ('map_gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
     ('tukey_age', CustomTukeyTransformer('Age', 'inner')),  #from chapter 4
     ('tukey_time spent', CustomTukeyTransformer('Time Spent', 'inner')),  #from chapter 4
+    ('impute', CustomKNNTransformer(n_neighbors=5)), # Move from last step for chapter8.
     ('scale_age', CustomRobustTransformer(target_column='Age')), #from 5
     ('scale_time spent', CustomRobustTransformer(target_column='Time Spent')), #from 5
-    ('impute', CustomKNNTransformer(n_neighbors=5)),
     ], verbose=True)
 
 
