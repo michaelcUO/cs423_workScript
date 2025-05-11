@@ -1007,18 +1007,6 @@ def dataset_setup(original_table, label_column_name:str, the_transformer, rs, ts
 
 
 
-########## From Chapter 9. ###########
-def titanic_setup(titanic_table, transformer=titanic_transformer, rs=titanic_variance_based_split, ts=.2):
-  return dataset_setup(titanic_table, 'Survived', transformer, rs, ts)
-
-
-########## From Chapter 9. ###########
-def customer_setup(customer_table, transformer=customer_transformer, rs=customer_variance_based_split, ts=.2):
-  return dataset_setup(customer_table, 'Rating', transformer, rs, ts)
-
-
-
-
 
 ######################### PIPELINES ########################################################
 
@@ -1046,6 +1034,22 @@ customer_transformer = Pipeline(steps=[
     ('scale_time spent', CustomRobustTransformer(target_column='Time Spent')), #from 5
     ('impute', CustomKNNTransformer(n_neighbors=5)),
     ], verbose=True)
+
+
+##############################################################################################
+
+
+
+########## From Chapter 9. ###########
+def titanic_setup(titanic_table, transformer=titanic_transformer, rs=titanic_variance_based_split, ts=.2):
+  return dataset_setup(titanic_table, 'Survived', transformer, rs, ts)
+
+
+########## From Chapter 9. ###########
+def customer_setup(customer_table, transformer=customer_transformer, rs=customer_variance_based_split, ts=.2):
+  return dataset_setup(customer_table, 'Rating', transformer, rs, ts)
+
+
 
 
 
