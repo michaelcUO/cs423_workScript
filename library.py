@@ -984,6 +984,44 @@ def find_random_state(
 
 
 
+
+########## From Chapter 9. ###########
+def dataset_setup(original_table, label_column_name:str, the_transformer, rs, ts=.2):
+    #your code below
+    labels = original_table[label_column_name].to_list()
+    features = original_table.drop(columns=label_column_name)
+
+    x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=ts, shuffle=True, random_state=rs, stratify=labels)
+
+    x_train_transformed = the_transformer.fit_transform(x_train, y_train)
+    x_test_transformed = the_transformer.transform(x_test)
+
+    x_train_numpy = x_train_transformed.to_numpy()
+    x_test_numpy = x_test_transformed.to_numpy()
+    y_train_numpy = np.array(y_train)
+    y_test_numpy = np.array(y_test)
+
+    return x_train_numpy, x_test_numpy, y_train_numpy, y_test_numpy
+
+
+
+
+
+########## From Chapter 9. ###########
+def titanic_setup(titanic_table, transformer=titanic_transformer, rs=titanic_variance_based_split, ts=.2):
+  return dataset_setup(titanic_table, 'Survived', transformer, rs, ts)
+
+
+########## From Chapter 9. ###########
+def customer_setup(customer_table, transformer=customer_transformer, rs=customer_variance_based_split, ts=.2):
+  return dataset_setup(customer_table, 'Rating', transformer, rs, ts)
+
+
+
+
+
+######################### PIPELINES ########################################################
+
 # Actual.
 titanic_transformer = Pipeline(steps=[
     ('map_gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
@@ -1011,71 +1049,3 @@ customer_transformer = Pipeline(steps=[
 
 
 
-
-
-
-
-
-
-
-
-
-
-# ######### USED FOR CHAPTER 5 ###################
-# #first define the pipeline (but do not invoke it)
-# titanic_transformer = Pipeline(steps=[
-#     ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-#     ('class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
-#     #add your new ohe step below
-#     ('joined_ohe', CustomOHETransformer(target_column='Joined')),
-#     ('fare', CustomTukeyTransformer(target_column='Fare', fence='outer'))
-# ], verbose=True)
-
-
-########## USED FOR CHAPTER 6 ################### LAST USED.
-# titanic_transformer = Pipeline(steps=[
-#     ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-#     ('class', CustomMappingTransformer('Class', {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
-#     #add your new ohe step below
-#     ('joined_ohe', CustomOHETransformer(target_column='Joined')),
-#     ('age', CustomTukeyTransformer(target_column='Age', fence='outer')),
-#     ('fare', CustomTukeyTransformer(target_column='Fare', fence='outer')),
-#     ('scale_age', CustomRobustTransformer(target_column='Age')),
-#     ('scale_fare', CustomRobustTransformer(target_column='Fare')),
-#     ('passthrough', FunctionTransformer(validate=False)),  #does nothing but does remove warning. Removes FutureWarning chapt7 cell 38.
-# ], verbose=True)
-
-
-# titanic_transformer = Pipeline(steps=[
-#     ('gender',     CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-#     ('class',      CustomMappingTransformer('Class',  {'Crew': 0, 'C3': 1, 'C2': 2, 'C1': 3})),
-#     ('joined_ohe', CustomOHETransformer(target_column='Joined')),
-#     # Removed clipping step to keep 'Fare' column raw:
-#     # ('fare',      CustomTukeyTransformer(target_column='Fare', fence='outer'))
-# ], verbose=True)
-
-
-# #Once you finish challenge 3 you will have first step - figure out others - I ended up with 5 total steps
-# customer_transformer = Pipeline(steps=[
-#     #fill in the steps on your own
-#     ('drop_columns', CustomDropColumnsTransformer(['ID'], 'drop')),
-#     ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-#     ('experience_level', CustomMappingTransformer('Experience Level', {'low': 0, 'medium': 1, 'high': 2})),
-#     ('os', CustomOHETransformer(target_column='OS')),
-#     ('isp', CustomOHETransformer(target_column='ISP')),
-#     ('time spent', CustomTukeyTransformer('Time Spent', 'inner'))
-# ], verbose=True)
-
-
-########## UPDATED PIPELINE FOR CHAPTER 6 ################## LAST USED.
-#Build pipeline and include scalers from last chapter and imputer from this
-# customer_transformer = Pipeline(steps=[
-#     ('drop_columns', CustomDropColumnsTransformer(['ID'], 'drop')),
-#     ('gender', CustomMappingTransformer('Gender', {'Male': 0, 'Female': 1})),
-#     ('experience_level', CustomMappingTransformer('Experience Level', {'low': 0, 'medium': 1, 'high': 2})),
-#     ('os', CustomOHETransformer(target_column='OS')),
-#     ('isp', CustomOHETransformer(target_column='ISP')),
-#     ('scale_time_spent', CustomRobustTransformer('Time Spent')),
-#     ('scale_age', CustomRobustTransformer('Age')),
-#     ('impute', CustomKNNTransformer())
-# ], verbose=True)
