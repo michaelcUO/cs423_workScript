@@ -12,6 +12,7 @@ from sklearn.neighbors import KNeighborsClassifier # From midterm.
 from sklearn.model_selection import train_test_split # From midterm.
 from sklearn.metrics import f1_score # From midterm.
 import sklearn
+from sklearn.metrics import precision_score, recall_score, accuracy_score, roc_auc_score
 sklearn.set_config(transform_output="pandas")  #says pass pandas tables through pipeline instead of numpy matrices
 
 # Global constants from chapter 7.
@@ -981,6 +982,31 @@ def find_random_state(
     rs_value: int = np.abs(np.array(Var) - mean_f1_ratio).argmin()  # Index of value closest to mean
 
     return rs_value, Var
+
+
+####### From Chapter 10. ###########
+def threshold_results(thresh_list, actuals, predicted):
+  result_df = pd.DataFrame(columns=['threshold', 'precision', 'recall', 'f1', 'accuracy', 'auc'])
+
+  for t in thresh_list:
+      yhat = [1 if v >= t else 0 for v in predicted]
+
+      precision = precision_score(actuals, yhat, zero_division=0)
+      recall = recall_score(actuals, yhat, zero_division=0)
+      f1 = f1_score(actuals, yhat)
+      accuracy = accuracy_score(actuals, yhat)
+      auc = roc_auc_score(actuals, predicted)  
+
+      result_df.loc[len(result_df)] = {
+          'threshold': t,
+          'precision': precision,
+          'recall': recall,
+          'f1': f1,
+          'accuracy': accuracy,
+          'auc': auc
+      }
+
+  return result_df, fancy_df
 
 
 
