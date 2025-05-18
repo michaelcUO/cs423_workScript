@@ -13,6 +13,7 @@ from sklearn.model_selection import train_test_split # From midterm.
 from sklearn.metrics import f1_score # From midterm.
 import sklearn
 from sklearn.metrics import precision_score, recall_score, accuracy_score, roc_auc_score
+from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 sklearn.set_config(transform_output="pandas")  #says pass pandas tables through pipeline instead of numpy matrices
 
 # Global constants from chapter 7.
