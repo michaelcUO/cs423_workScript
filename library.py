@@ -1005,7 +1005,7 @@ def threshold_results(thresh_list, actuals, predicted):
           'accuracy': accuracy,
           'auc': auc
       }
-
+  fancy_df = result_df.copy()  
   return result_df, fancy_df
 
 
