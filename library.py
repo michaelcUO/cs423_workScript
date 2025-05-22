@@ -13,7 +13,8 @@ from sklearn.model_selection import train_test_split # From midterm.
 from sklearn.metrics import f1_score # From midterm.
 import sklearn
 from sklearn.metrics import precision_score, recall_score, accuracy_score, roc_auc_score
-from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
+from sklearn.linear_model import LogisticRegression, LogisticRegressionCV # From Chapter 10.
+from sklearn.model_selection import ParameterGrid # From Chapter 11.
 sklearn.set_config(transform_output="pandas")  #says pass pandas tables through pipeline instead of numpy matrices
 
 # Global constants from chapter 7.
@@ -983,6 +984,71 @@ def find_random_state(
     rs_value: int = np.abs(np.array(Var) - mean_f1_ratio).argmin()  # Index of value closest to mean
 
     return rs_value, Var
+
+
+
+############ From Chapter 11. ###########
+
+def halving_search(model, grid, x_train, y_train, factor=2, min_resources="exhaust", scoring='roc_auc'):
+  #your code below
+
+      """
+      Runs HalvingGridSearchCV on the given model and parameter grid.
+
+      Parameters
+      ----------
+      model : estimator object
+          The machine learning model (e.g., SVC, KNeighborsClassifier).
+      grid : dict
+          Dictionary of hyperparameters to try.
+      x_train : array-like
+          Training features.
+      y_train : array-like
+          Training labels.
+      factor : int, default=2
+          The ‘halving’ factor.
+      min_resources : int or "exhaust", default="exhaust"
+          Minimum number of resources to start with.
+      scoring : str, default='roc_auc'
+          Scoring metric to evaluate model performance.
+
+      Returns
+      -------
+      grid_result : fitted HalvingGridSearchCV object
+          Contains all cross-validation results and best estimator.
+      """
+      halving_cv = HalvingGridSearchCV(
+          model, grid,
+          scoring=scoring,
+          n_jobs=-1,
+          min_resources=min_resources,
+          factor=factor,
+          cv=5,
+          random_state=1234,
+          refit=True
+      )
+
+      grid_result = halving_cv.fit(x_train, y_train)
+      return grid_result
+
+
+
+
+######### From Chapter 11. ###########
+#sorts both keys and values
+def sort_grid(grid):
+  sorted_grid = grid.copy()
+
+  #sort values - note that this will expand range for you
+  for k,v in sorted_grid.items():
+    sorted_grid[k] = sorted(sorted_grid[k], key=lambda x: (x is None, x))  #handles cases where None is an alternative value
+
+  #sort keys
+  sorted_grid = dict(sorted(sorted_grid.items()))
+
+  return sorted_grid
+
+
 
 
 ####### From Chapter 10. ###########
