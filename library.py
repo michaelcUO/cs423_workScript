@@ -991,7 +991,7 @@ def find_random_state(
 
 ############ From Chapter 11. ###########
 
-def halving_search(model, grid, x_train, y_train, factor=2, min_resources="exhaust", scoring='roc_auc'):
+def halving_search(model, grid, x_train, y_train, factor=3, min_resources="exhaust", scoring='roc_auc'): # Factor changed from 2 to 3 per chapter 11.
   #your code below
 
       """
